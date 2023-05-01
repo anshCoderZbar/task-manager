@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "DM Sans", sans-serif !important;
+    font-feature-settings: "kern" !important;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.5px;
+  }
+}
+
+input.defaultCheckbox::before {
+  content: url(../src/assets/svg/checked.svg);
+  color: white;
+  opacity: 0;
+  height: 16px;
+  width: 16px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0px);
+}
+
+input:checked.defaultCheckbox::before {
+  opacity: 1;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.inputScrollBar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.inputScrollBar::-webkit-scrollbar {
+  width: 2px;
+  background-color: #f5f5f5;
+}
+
+.inputScrollBar::-webkit-scrollbar-thumb {
+  background-color: #422afb;
+}
+
+.chip {
+  background: #484c7f !important;
+}
+.optionContainer .highlightOption {
+  background: #484c7f !important;
+}
+.multiSelectContainer li:hover {
+  background: #484c7f !important;
+  color: #fff;
+  cursor: pointer;
+}
