@@ -2,14 +2,10 @@ import React from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import navbarimage from "assets/img/layout/Navbar.png";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import {
-  IoMdNotificationsOutline,
-  IoMdInformationCircleOutline,
-} from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
 
 const Navbar = (props) => {
@@ -22,7 +18,7 @@ const Navbar = (props) => {
         <div className="h-6 w-[224px] pt-1">
           <a
             className="text-sm font-normal text-navy-700 hover:underline dark:text-white dark:hover:text-white"
-            href=" "
+            href="#"
           >
             Pages
             <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
