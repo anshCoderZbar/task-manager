@@ -61,3 +61,12 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #fff;
   cursor: pointer;
 }
+.errorMessage {
+  color: #ff3b3b;
+  font-size: 12px;
+  position: relative;
+  bottom: 6px;
+  text-align: left !important;
+  transition: linear 3s;
+  text-transform: lowercase;
+}

@@ -41,7 +41,7 @@ export const EmployeeCard = () => {
               employee
             </span>
           </div>
-          <div className="my-3 grid grid-cols-2 place-items-start gap-x-0 gap-y-5 py-5">
+          <div className="my-3 grid grid-cols-1 place-items-start gap-x-0 gap-y-5 py-5 lg:grid-cols-2">
             <div className="flex items-center gap-1">
               <AiFillPhone />
               <span className="text-sm">98784878778</span>
