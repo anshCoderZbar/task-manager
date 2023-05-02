@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import InputField from "components/fields/InputField";
@@ -12,8 +12,24 @@ export const EmployeeForm = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(employeeValidation) });
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (e) => {
+    setSelectedFiles([...selectedFiles, ...e.target.files]);
+  };
+  const handleRemoveFile = (index) => {
+    const updatedFiles = [...selectedFiles];
+    updatedFiles.splice(index, 1);
+    setSelectedFiles(updatedFiles);
+  };
+
   const onSubmit = (data) => {
     console.log(data);
+    const formData = new FormData();
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append("files", selectedFiles[i]);
+      console.log(selectedFiles);
+    }
   };
 
   return (
@@ -75,8 +91,18 @@ export const EmployeeForm = () => {
             id="upload"
             type="file"
             name="upload"
-            {...register("upload")}
+            multiple
+            onChange={handleFileChange}
           />
+          {selectedFiles.map((file, index) => (
+            <div key={index}>
+              <p>{file.name}</p>
+              {file.type.startsWith("image/") && (
+                <img src={URL.createObjectURL(file)} alt={file.name} />
+              )}
+              <button onClick={() => handleRemoveFile(index)}>Remove</button>
+            </div>
+          ))}
           <p className="errorMessage">{errors?.upload?.message}</p>
         </div>
         <div className="grid grid-cols-1 gap-0 md:grid-cols-2 md:gap-3">

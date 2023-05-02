@@ -32,7 +32,9 @@ export const Employees = () => {
         </h4>
         <EmployeeForm />
       </PopupModal>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3">
+        <EmployeeCard />
+        <EmployeeCard />
         <EmployeeCard />
       </div>
     </div>
