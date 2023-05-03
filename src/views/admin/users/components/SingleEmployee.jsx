@@ -42,8 +42,8 @@ export const SingleEmployee = () => {
           <p className="mb-2 text-gray-600">{`Blood Group: ${bloodGroup}`}</p>
           <h2 className="mb-4 text-xl font-bold">Files</h2>
           <ul className="mb-4 list-disc pl-4">
-            {files.map((file) => (
-              <li key={file.name} className="mb-2 flex items-center">
+            {files.map((file, i) => (
+              <li key={i} className="mb-2 flex items-center">
                 <img
                   src={file.url}
                   alt={file.name}
@@ -53,7 +53,7 @@ export const SingleEmployee = () => {
                 <a
                   href={file.url}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noreferrer"
                   className="ml-2 block text-blue-600 hover:underline"
                 >
                   View

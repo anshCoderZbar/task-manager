@@ -40,7 +40,7 @@ export const PopupModal = (props) => {
               >
                 {props?.hasCloseButton ? (
                   <button
-                    className="absolute right-4 top-4 block"
+                    className="absolute right-4 top-5 block"
                     onClick={closeModal}
                   >
                     <GrClose />
