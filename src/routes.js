@@ -14,9 +14,10 @@ import {
   MdPerson,
   MdLock,
   MdWorkOutline,
-  MdBadge
+  MdBadge,
 } from "react-icons/md";
 import { Employees } from "views/admin/users";
+import { SingleEmployee } from "views/admin/users/components/SingleEmployee";
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
     path: "employees",
     icon: <MdBadge className="h-6 w-6" />,
     component: <Employees />,
+  },
+  {
+    layout: "/admin",
+    path: "/employees/:id",
+    component: <SingleEmployee />,
   },
   {
     name: "Projects",
