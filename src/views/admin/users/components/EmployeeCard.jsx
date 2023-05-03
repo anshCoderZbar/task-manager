@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import avatar from "assets/img/avatars/avatar11.png";
 
@@ -56,6 +57,14 @@ export const EmployeeCard = () => {
             <AiOutlineMail className="text-gray-600" />
             <span className="ml-2 text-gray-700">johndoe@example.com</span>
           </div>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <Link
+            to="/admin/employees/John_Doe"
+            className="rounded-md border px-3 py-1 text-sm font-medium text-gray-600 hover:bg-gray-100"
+          >
+            View Full Profile
+          </Link>
         </div>
       </div>
     </div>
