@@ -15,7 +15,7 @@ const Navbar = (props) => {
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
       <div className="ml-[6px]">
-        <div className="h-6 w-[224px] pt-1">
+        {/* <div className="h-6 w-[224px] pt-1">
           <a
             className="text-sm font-normal text-navy-700 hover:underline dark:text-white dark:hover:text-white"
             href="#"
@@ -32,7 +32,7 @@ const Navbar = (props) => {
           >
             {brandText}
           </Link>
-        </div>
+        </div> */}
         <p className="shrink text-[33px] capitalize text-navy-700 dark:text-white">
           <Link
             to="#"
@@ -151,7 +151,7 @@ const Navbar = (props) => {
               >
                 <li>
                   <a
-                    href="#"
+                    href="#Dashboard"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
                     Dashboard
@@ -159,24 +159,16 @@ const Navbar = (props) => {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#Settings"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
                     Settings
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Earnings
-                  </a>
-                </li>
               </ul>
               <div className="py-2">
                 <a
-                  href="#"
+                  href="#Signout"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Sign out
