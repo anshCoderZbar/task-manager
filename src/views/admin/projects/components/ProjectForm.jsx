@@ -122,7 +122,7 @@ export const ProjectForm = () => {
               checked={tabs.fullPayment ? true : false}
               readOnly
             />
-            <label htmlFor="option1" className="font-medium text-gray-700">
+            <label htmlhtmlFor="option1" className="font-medium text-gray-700">
               Full payment
             </label>
           </div>
@@ -142,7 +142,7 @@ export const ProjectForm = () => {
               value="option2"
               className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
             />
-            <label htmlFor="option2" className="font-medium text-gray-700">
+            <label htmlhtmlFor="option2" className="font-medium text-gray-700">
               Partialy paid
             </label>
             {tabs.partialyPayment && fields.length < 4 ? (

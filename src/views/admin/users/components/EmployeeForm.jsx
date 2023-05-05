@@ -82,7 +82,7 @@ export const EmployeeForm = () => {
         <div className="mb-3">
           <label
             className="text-sm font-bold  text-navy-700 dark:text-white"
-            htmlFor="upload"
+            htmlhtmlFor="upload"
           >
             Upload file
           </label>

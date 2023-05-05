@@ -5,7 +5,7 @@ const SwitchField = (props) => {
   return (
     <div className={`flex justify-between ${mt} ${mb} items-center`}>
       <label
-        htmlFor={id}
+        htmlhtmlFor={id}
         className="max-w-[80%] hover:cursor-pointer lg:max-w-[65%]"
       >
         <h5 className="text-base font-bold text-navy-700 dark:text-white">

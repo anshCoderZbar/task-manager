@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ProjectCard } from "./components/ProjectCard";
 import { PopupModal } from "components/modal";
 import { ProjectForm } from "./components/ProjectForm";
+import { AppContext } from "store/Store";
 
 export const ProjectsOverView = () => {
   let [isOpen, setIsOpen] = useState(false);
