@@ -17,6 +17,7 @@ export const EmployeeForm = () => {
   const handleFileChange = (e) => {
     setSelectedFiles([...selectedFiles, ...e.target.files]);
   };
+
   const handleRemoveFile = (index) => {
     const updatedFiles = [...selectedFiles];
     updatedFiles.splice(index, 1);
