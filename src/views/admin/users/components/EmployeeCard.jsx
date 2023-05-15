@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import avatar from "assets/img/avatars/avatar11.png";
+import avatar from "assets/img/avatars/avatar.png";
 
 import { BiEdit, BiCake, BiDonateBlood } from "react-icons/bi";
 import {
@@ -19,7 +19,7 @@ export const EmployeeCard = () => {
           <img
             src={avatar}
             alt="employee-avatar"
-            className="h-16 w-16 rounded-full border-2 border-gray-200"
+            className="h-16 w-16 rounded-full "
           />
           <div className="ml-3">
             <h3 className="text-lg font-medium text-gray-900">John Doe</h3>

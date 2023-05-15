@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "assets/img/avatars/avatar11.png";
+import avatar from "assets/img/avatars/avatar.png";
 
 export const SingleEmployee = () => {
   const name = "John Smith";

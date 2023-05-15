@@ -17,6 +17,7 @@ export const EmployeeForm = () => {
   const handleFileChange = (e) => {
     setSelectedFiles([...selectedFiles, ...e.target.files]);
   };
+
   const handleRemoveFile = (index) => {
     const updatedFiles = [...selectedFiles];
     updatedFiles.splice(index, 1);
@@ -82,7 +83,7 @@ export const EmployeeForm = () => {
         <div className="mb-3">
           <label
             className="text-sm font-bold  text-navy-700 dark:text-white"
-            htmlhtmlFor="upload"
+            htmlFor="upload"
           >
             Upload file
           </label>

@@ -1,10 +1,15 @@
+import axios from "axios";
+import { useNotifications } from "reapop";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+
 import InputField from "components/fields/InputField";
 import Checkbox from "components/checkbox";
-import { useForm } from "react-hook-form";
 import { loginSchema } from "./variables/validation";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function SignIn() {
+  const { notify } = useNotifications();
   const {
     register,
     handleSubmit,
@@ -12,8 +17,23 @@ export default function SignIn() {
   } = useForm({ resolver: yupResolver(loginSchema) });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("email", "gaurav@gmail.com");
+    formData.append("password", "hello");
+    loginQuery.mutate(formData);
   };
+
+  const loginQuery = useMutation(["login"], {
+    mutationFn: (onSubmit) =>
+      axios.post(`https://coderzbar.info/dev/taskmanager/api/login`, onSubmit),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+      notify("OOPS! some error occured", "error");
+    },
+  });
 
   return (
     <div className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start">

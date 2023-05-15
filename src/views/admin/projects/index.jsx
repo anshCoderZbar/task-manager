@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { ProjectCard } from "./components/ProjectCard";
 import { PopupModal } from "components/modal";
 import { ProjectForm } from "./components/ProjectForm";
-import { AppContext } from "store/Store";
 
 export const ProjectsOverView = () => {
   let [isOpen, setIsOpen] = useState(false);
@@ -33,11 +32,6 @@ export const ProjectsOverView = () => {
         <ProjectForm />
       </PopupModal>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
-        <ProjectCard />
         <ProjectCard />
       </div>
     </div>

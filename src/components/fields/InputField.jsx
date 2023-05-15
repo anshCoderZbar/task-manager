@@ -5,7 +5,7 @@ const InputField = React.forwardRef((props, ref) => {
   return (
     <div className="mb-3">
       <label
-        htmlhtmlFor={id}
+        htmlFor={id}
         className={`text-sm font-bold  text-navy-700 dark:text-white`}
       >
         {label}
