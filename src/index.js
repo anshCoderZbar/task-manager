@@ -1,7 +1,6 @@
+import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-
 import App from "./App";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "queryClient";
@@ -12,14 +11,14 @@ import { Notification } from "components/notification";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter>
-    <NotificationsProvider>
-      <Notification />
-      <QueryClientProvider client={queryClient}>
+  <React.Fragment>
+    <QueryClientProvider client={queryClient}>
+      <NotificationsProvider>
+        <Notification />
         <Store>
           <App />
         </Store>
-      </QueryClientProvider>
-    </NotificationsProvider>
-  </BrowserRouter>
+      </NotificationsProvider>
+    </QueryClientProvider>
+  </React.Fragment>
 );

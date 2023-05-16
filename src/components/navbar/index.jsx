@@ -1,7 +1,7 @@
 import React from "react";
 import Dropdown from "components/dropdown";
 import { FiAlignJustify } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
@@ -9,30 +9,20 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar.png";
 
 const Navbar = (props) => {
+  const navigate = useNavigate();
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
+
+  const userDetails = JSON.parse(sessionStorage.getItem("userData"));
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("userData");
+    navigate("/auth");
+  };
 
   return (
     <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
       <div className="ml-[6px]">
-        {/* <div className="h-6 w-[224px] pt-1">
-          <a
-            className="text-sm font-normal text-navy-700 hover:underline dark:text-white dark:hover:text-white"
-            href="#"
-          >
-            Pages
-            <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
-              {" "}
-              /{" "}
-            </span>
-          </a>
-          <Link
-            className="text-sm font-normal capitalize text-navy-700 hover:underline dark:text-white dark:hover:text-white"
-            to="#"
-          >
-            {brandText}
-          </Link>
-        </div> */}
         <p className="shrink text-[33px] capitalize text-navy-700 dark:text-white">
           <Link
             to="#"
@@ -87,30 +77,12 @@ const Navbar = (props) => {
                   <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
                     New Update: Horizon UI Dashboard PRO
                   </p>
-                  <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                    A new update for your downloaded item is available!
-                  </p>
-                </div>
-              </button>
-
-              <button className="flex w-full items-center">
-                <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                  <BsArrowBarUp />
-                </div>
-                <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                  <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                    New Update: Horizon UI Dashboard PRO
-                  </p>
-                  <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                    A new update for your downloaded item is available!
-                  </p>
                 </div>
               </button>
             </div>
           }
           classNames={"py-2 top-4 -left-[230px] md:-left-[440px] w-max"}
         />
-        {/* start Horizon PRO */}
 
         <div
           className="cursor-pointer text-gray-600"
@@ -130,11 +102,10 @@ const Navbar = (props) => {
             <RiMoonFill className="h-4 w-4 text-gray-600 dark:text-white" />
           )}
         </div>
-        {/* Profile & Dropdown */}
         <Dropdown
           button={
             <img
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 cursor-pointer rounded-full"
               src={avatar}
               alt="Elon Musk"
             />
@@ -142,37 +113,18 @@ const Navbar = (props) => {
           children={
             <div className="z-10 w-44 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700">
               <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div>Bonnie Green</div>
-                <div className="truncate font-medium">name@flowbite.com</div>
+                <div className="capitalize">{userDetails?.user?.username}</div>
+                <div className="truncate font-medium">
+                  {userDetails?.user?.email}
+                </div>
               </div>
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownInformationButton"
-              >
-                <li>
-                  <a
-                    href="#Dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#Settings"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Settings
-                  </a>
-                </li>
-              </ul>
               <div className="py-2">
-                <a
-                  href="#Signout"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                <button
+                  onClick={handleLogout}
+                  className="block bg-none px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   Sign out
-                </a>
+                </button>
               </div>
             </div>
           }

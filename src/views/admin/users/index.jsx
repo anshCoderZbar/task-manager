@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { PopupModal } from "components/modal";
 import { EmployeeForm } from "./components/EmployeeForm";
 import { EmployeeCard } from "./components/EmployeeCard";
-import { useNotifications } from "reapop";
 
 export const Employees = () => {
-  const { notify } = useNotifications();
   let [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    notify("Welcome back", "success");
-  }, []);
 
   return (
     <div className="pt-5s mx-auto mb-auto flex h-full min-h-[84vh] w-full flex-col gap-5 p-2 md:pr-2">
@@ -36,11 +30,9 @@ export const Employees = () => {
         <h4 className="mb-2 border-b py-4 px-5 text-lg font-bold">
           Create Employees
         </h4>
-        <EmployeeForm />
+        <EmployeeForm setIsOpen={setIsOpen} />
       </PopupModal>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3">
-        <EmployeeCard />
-      </div>
+      <EmployeeCard />
     </div>
   );
 };
