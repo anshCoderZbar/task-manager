@@ -26,26 +26,8 @@ const App = () => {
             <Navigate to={auth && auth.token ? "/admin" : "/auth"} replace />
           }
         />
-        <Route
-          path="/auth/*"
-          element={
-            auth && auth.token ? (
-              <Navigate to="/admin" replace />
-            ) : (
-              <AuthLayout />
-            )
-          }
-        />
-        <Route
-          path="/admin/*"
-          element={
-            auth && auth.token ? (
-              <AdminLayout />
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+        <Route path="/auth/*" element={<AuthLayout />} />
+        <Route path="/admin/*" element={<AdminLayout />} />
       </Routes>
     </Router>
   );

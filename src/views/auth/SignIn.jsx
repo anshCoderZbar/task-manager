@@ -36,12 +36,9 @@ export default function SignIn() {
       navigate("/admin");
     },
     onError: (error) => {
-      console.log(error);
-      notify("OOPS! some error occured", "error");
+      notify(error?.response?.data?.message, "error");
     },
   });
-
-  console.log();
 
   return (
     <div className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start">

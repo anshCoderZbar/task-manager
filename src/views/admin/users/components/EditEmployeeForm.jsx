@@ -55,7 +55,10 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
     if (defaultFile && defaultFile.length > 0) {
       setDefaultFileValue(defaultFile);
     }
-
+    defaultValue.joiningDate =
+      singleEmployeeQuery?.data?.data?.user?.joiningdate;
+    defaultValue.birthDate = singleEmployeeQuery?.data?.data?.user?.dateofbirth;
+    defaultValue.bloodGroup = singleEmployeeQuery?.data?.data?.user?.bloodgroup;
     reset({ ...defaultValue });
   }, [singleEmployeeQuery?.data?.data]);
 
@@ -146,13 +149,13 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
               onChange={handleFileChange}
             />
             {defaultFileValue &&
-              defaultFileValue?.map((img) => {
+              defaultFileValue?.map((img, index) => {
                 return (
-                  <div className="relative">
+                  <div key={index} className="relative">
                     <img src={img} className="mt-3" />
                     <div
-                      onClick={(img) => handleDeleteImg(img)}
-                      className="pointer absolute top-3 right-3 text-white"
+                      onClick={() => handleDeleteImg(img)}
+                      className="absolute top-3 right-3 cursor-pointer text-white"
                     >
                       <ImCross />
                     </div>
