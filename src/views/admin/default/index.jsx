@@ -17,13 +17,19 @@ import tableDataCheck from "./variables/tableDataCheck.json";
 import tableDataComplex from "./variables/tableDataComplex.json";
 import { useAppContext } from "store/Store";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { userDetails, setUserDetails } = useAppContext();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const auth = JSON.parse(sessionStorage.getItem("userData"));
     if (auth) {
       setUserDetails(auth);
+    }
+    if (!auth?.token) {
+      navigate("/auth/");
     }
   }, []);
 

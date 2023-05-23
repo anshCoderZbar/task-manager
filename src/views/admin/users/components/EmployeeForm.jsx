@@ -56,7 +56,7 @@ export const EmployeeForm = (props) => {
         bearerToken()
       ),
     onSuccess: (data) => {
-      notify("added", "Sucess");
+      notify("Employee added successfully", "success");
       props.setIsOpen(false);
       queryClient.invalidateQueries(["fetch-employee"]);
     },

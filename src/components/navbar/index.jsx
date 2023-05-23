@@ -7,16 +7,19 @@ import { FiSearch } from "react-icons/fi";
 import { RiMoonFill, RiSunFill } from "react-icons/ri";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar.png";
+import { useAppContext } from "store/Store";
 
 const Navbar = (props) => {
   const navigate = useNavigate();
+  const { setUserDetails } = useAppContext();
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
 
-  const userDetails = JSON.parse(sessionStorage.getItem("userData"));
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
 
   const handleLogout = () => {
     sessionStorage.removeItem("userData");
+    setUserDetails({});
     navigate("/auth");
   };
 
@@ -113,9 +116,9 @@ const Navbar = (props) => {
           children={
             <div className="z-10 w-44 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700">
               <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div className="capitalize">{userDetails?.user?.username}</div>
+                <div className="capitalize">{userData?.user?.username}</div>
                 <div className="truncate font-medium">
-                  {userDetails?.user?.email}
+                  {userData?.user?.email}
                 </div>
               </div>
               <div className="py-2">

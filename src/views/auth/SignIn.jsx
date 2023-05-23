@@ -9,11 +9,20 @@ import Checkbox from "components/checkbox";
 import { loginSchema } from "./variables/validation";
 import { useNavigate } from "react-router-dom";
 import { LoadingIcon } from "assets/icons";
+import { useEffect } from "react";
+import { useAppContext } from "store/Store";
 
 export default function SignIn() {
   const { notify } = useNotifications();
-
   const navigate = useNavigate();
+  const { userDetails } = useAppContext();
+
+  useEffect(() => {
+    if (userDetails.token) {
+      navigate("/admin/");
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,

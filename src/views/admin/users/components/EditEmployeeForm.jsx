@@ -6,12 +6,12 @@ import { employeeValidation } from "../variable/validation";
 import { ImCross } from "react-icons/im";
 
 import InputField from "components/fields/InputField";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { bearerToken } from "components/utils";
 import { LoadingIcon } from "assets/icons";
 
-export const EditEmployeeForm = ({ setIsOpen, id }) => {
+export const EditEmployeeForm = ({ id }) => {
   const { notify } = useNotifications();
   const {
     register,
@@ -51,7 +51,11 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
     defaultValue.designation =
       singleEmployeeQuery?.data?.data?.user?.designation;
     defaultValue.phone = singleEmployeeQuery?.data?.data?.user?.phone;
-    const defaultFile = singleEmployeeQuery?.data?.data?.user?.file.split("@@");
+    const defaultFile = singleEmployeeQuery?.data?.data?.user?.file?.includes(
+      "@@"
+    )
+      ? singleEmployeeQuery?.data?.data?.user?.file?.split("@@")
+      : [singleEmployeeQuery?.data?.data?.user?.file];
     if (defaultFile && defaultFile.length > 0) {
       setDefaultFileValue(defaultFile);
     }
@@ -62,10 +66,29 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
     reset({ ...defaultValue });
   }, [singleEmployeeQuery?.data?.data]);
 
-  const handleDeleteImg = (img) => {
+  const handleDeleteFile = (img, index) => {
     const newFile = defaultFileValue?.filter((data) => data !== img);
+    console.log(index);
     setDefaultFileValue(newFile);
+    deleteIUploadedFile.mutate({ userId: id, imageIndex: index });
   };
+
+  const deleteIUploadedFile = useMutation(["delete-uploaded-file"], {
+    mutationFn: (handleDeleteFile) => {
+      axios.delete(
+        `${process.env.REACT_APP_API_BASE_URL}/delete-userimg/${handleDeleteFile?.userId}/${handleDeleteFile?.imageIndex}`,
+        bearerToken()
+      );
+    },
+    onSuccess: (data) => {
+      notify("File deleted", "success");
+      console.log(data);
+    },
+    onError: (error) => {
+      notify("OOPS! some error occured", "error");
+      console.log(error);
+    },
+  });
 
   const onSubmit = (data) => {
     // const formData = new FormData();
@@ -86,7 +109,7 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-5">
-      {singleEmployeeQuery?.isLoading ? (
+      {singleEmployeeQuery && singleEmployeeQuery?.isLoading ? (
         <div className="flex items-start justify-center">
           <LoadingIcon />
         </div>
@@ -154,7 +177,7 @@ export const EditEmployeeForm = ({ setIsOpen, id }) => {
                   <div key={index} className="relative">
                     <img src={img} className="mt-3" />
                     <div
-                      onClick={() => handleDeleteImg(img)}
+                      onClick={() => handleDeleteFile(img, index)}
                       className="absolute top-3 right-3 cursor-pointer text-white"
                     >
                       <ImCross />
