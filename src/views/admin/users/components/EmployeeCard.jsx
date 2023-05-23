@@ -26,7 +26,7 @@ export const EmployeeCard = () => {
   const { notify } = useNotifications();
   const fetchEmployees = () => {
     return axios?.get(
-      `https://coderzbar.info/dev/taskmanager/api/users`,
+      `${process.env.REACT_APP_API_BASE_URL}/users`,
       bearerToken()
     );
   };
@@ -40,7 +40,7 @@ export const EmployeeCard = () => {
   const deleteEmployeeQuery = useMutation(["deleteEmploye"], {
     mutationFn: (handleDelete) =>
       axios.delete(
-        `https://coderzbar.info/dev/taskmanager/api/user-delete/${handleDelete}`,
+        `${process.env.REACT_APP_API_BASE_URL}/user-delete/${handleDelete}`,
         bearerToken()
       ),
     onSuccess: (data) => {
