@@ -3,14 +3,16 @@ import React, { useEffect, useState } from "react";
 import { PopupModal } from "components/modal";
 import { EmployeeForm } from "./components/EmployeeForm";
 import { EmployeeCard } from "./components/EmployeeCard";
-import { useNotifications } from "reapop";
+import { useNavigate } from "react-router-dom";
 
 export const Employees = () => {
-  const { notify } = useNotifications();
+  const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
-
   useEffect(() => {
-    notify("Welcome back", "success");
+    const auth = JSON.parse(sessionStorage.getItem("userData"));
+    if (!auth?.token) {
+      navigate("/auth/");
+    }
   }, []);
 
   return (
@@ -36,11 +38,9 @@ export const Employees = () => {
         <h4 className="mb-2 border-b py-4 px-5 text-lg font-bold">
           Create Employees
         </h4>
-        <EmployeeForm />
+        <EmployeeForm setIsOpen={setIsOpen} />
       </PopupModal>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3">
-        <EmployeeCard />
-      </div>
+      <EmployeeCard />
     </div>
   );
 };

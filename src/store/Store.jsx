@@ -1,9 +1,17 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext({});
 
 export const Store = ({ children }) => {
   const [userDetails, setUserDetails] = useState({});
+
+  useEffect(() => {
+    const auth = JSON.parse(sessionStorage.getItem("userData"));
+    if (auth) {
+      setUserDetails(auth);
+    }
+  }, []);
+
   return (
     <UserContext.Provider value={{ userDetails, setUserDetails }}>
       {children}
@@ -11,4 +19,4 @@ export const Store = ({ children }) => {
   );
 };
 
-export const AppContext = () => useContext(UserContext);
+export const useAppContext = () => useContext(UserContext);

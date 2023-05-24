@@ -36,3 +36,25 @@ export const employeeValidation = object({
     .required("Password is required")
     .oneOf([ref("password")], "Passwords must match"),
 });
+
+export const editEmployeeValidation = object({
+  userName: string().required("username is required"),
+  email: string()
+    .required("Email is required")
+    .matches(
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Email must be a valid email"
+    ),
+  designation: string().required("designation is required"),
+  phone: string()
+    .required("Phone number is required")
+    .min(9, "Phone number should be 9 digit minimum.")
+    .max(15, "Phone number should be 15 digit maximum."),
+  upload: mixed().test("avatar", "The file is too large", (value) => {
+    if (!value?.length) return true;
+    return value[0]?.size <= 2000000;
+  }),
+  joiningDate: string().required("Joining Date is required"),
+  birthDate: string().required("birthDate is required"),
+  bloodGroup: string().required("bloodgroup is required"),
+});
