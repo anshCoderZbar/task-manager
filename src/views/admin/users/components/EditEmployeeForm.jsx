@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNotifications } from "reapop";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { employeeValidation } from "../variable/validation";
+import { editEmployeeValidation } from "../variable/validation";
 import { ImCross } from "react-icons/im";
 
 import InputField from "components/fields/InputField";
@@ -10,8 +10,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { bearerToken } from "components/utils";
 import { LoadingIcon } from "assets/icons";
+import queryClient from "queryClient";
 
-export const EditEmployeeForm = ({ id }) => {
+export const EditEmployeeForm = ({ id, setIsOpen }) => {
   const { notify } = useNotifications();
   const {
     register,
@@ -19,11 +20,12 @@ export const EditEmployeeForm = ({ id }) => {
     formState: { errors },
     reset,
   } = useForm({
-    resolver: yupResolver(employeeValidation),
+    resolver: yupResolver(editEmployeeValidation),
   });
 
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [defaultFileValue, setDefaultFileValue] = useState([]);
+  const [showLoader, setShowLoader] = useState(true);
 
   const handleFileChange = (e) => {
     setSelectedFiles([...selectedFiles, ...e.target.files]);
@@ -63,7 +65,14 @@ export const EditEmployeeForm = ({ id }) => {
       singleEmployeeQuery?.data?.data?.user?.joiningdate;
     defaultValue.birthDate = singleEmployeeQuery?.data?.data?.user?.dateofbirth;
     defaultValue.bloodGroup = singleEmployeeQuery?.data?.data?.user?.bloodgroup;
+
     reset({ ...defaultValue });
+
+    const timeout = setTimeout(() => {
+      setShowLoader(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
   }, [singleEmployeeQuery?.data?.data]);
 
   const handleDeleteFile = (img, index) => {
@@ -91,25 +100,44 @@ export const EditEmployeeForm = ({ id }) => {
   });
 
   const onSubmit = (data) => {
-    // const formData = new FormData();
-    // formData.append("username", data?.userName);
-    // formData.append("email", data?.email);
-    // formData.append("designation", data?.designation);
-    // formData.append("phone", data?.phone);
-    // selectedFiles.forEach((file, index) => {
-    //   formData.append(`file[${index}]`, file);
-    // });
-    // formData.append("joiningdate", data?.joiningDate);
-    // formData.append("dateofbirth", data?.birthDate);
-    // formData.append("bloodgroup", data?.bloodGroup);
-    // formData.append("password", data?.password);
-    // formData.append("password_confirmation", data?.confirmPassword);
-    // editEmployeeQuery.mutate(formData);
+    const formData = new FormData();
+    formData.append("username", data?.userName);
+    formData.append("email", data?.email);
+    formData.append("designation", data?.designation);
+    formData.append("phone", data?.phone);
+    selectedFiles.forEach((file, index) => {
+      formData.append(`file[${index}]`, file);
+    });
+    formData.append("joiningdate", data?.joiningDate);
+    formData.append("dateofbirth", data?.birthDate);
+    formData.append("bloodgroup", data?.bloodGroup);
+    editEmployeeQuery.mutate(formData);
   };
+  const editEmployeeQuery = useMutation(["edit-employee"], {
+    mutationFn: (onSubmit) =>
+      axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/updateemployee/${id}`,
+        onSubmit,
+        bearerToken()
+      ),
+    onSuccess: (data) => {
+      notify("Employee edited successfully", "success");
+      setIsOpen(false);
+      queryClient.invalidateQueries(["fetch-employee"]);
+    },
+    onError: (error) => {
+      notify(
+        error?.response?.data?.message
+          ? error?.response?.data?.message
+          : "OOPS! some error occured",
+        "error"
+      );
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-5">
-      {singleEmployeeQuery && singleEmployeeQuery?.isLoading ? (
+      {singleEmployeeQuery?.isLoading || showLoader ? (
         <div className="flex items-start justify-center">
           <LoadingIcon />
         </div>
@@ -232,34 +260,16 @@ export const EditEmployeeForm = ({ id }) => {
             {...register("bloodGroup")}
           />
           <p className="errorMessage">{errors?.bloodGroup?.message}</p>
-          <InputField
-            extra="mb-3"
-            label="Password"
-            placeholder="Password"
-            name="password"
-            state={errors?.password?.message ? "error" : ""}
-            type="password"
-            autoComplete="false"
-            {...register("password")}
-          />
-          <p className="errorMessage">{errors?.password?.message}</p>
-          <InputField
-            extra="mb-3"
-            label="Confirm Password"
-            placeholder="Confirm Password"
-            name="confirmPassword"
-            type="password"
-            autoComplete="false"
-            state={errors?.confirmPassword?.message ? "error" : ""}
-            {...register("confirmPassword")}
-          />
-          <p className="errorMessage">{errors?.confirmPassword?.message}</p>
         </div>
       )}
 
-      <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
-        Create
-      </button>
+      {editEmployeeQuery?.isLoading ? (
+        <LoadingIcon />
+      ) : (
+        <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
+          Create
+        </button>
+      )}
     </form>
   );
 };
