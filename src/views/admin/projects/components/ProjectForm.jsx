@@ -5,8 +5,14 @@ import InputField from "components/fields/InputField";
 import { MultiSelectDropDown } from "components/multi-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { projectSchema } from "../variables/validation";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { bearerToken } from "components/utils";
+import { useNotifications } from "reapop";
+import { LoadingIcon } from "assets/icons";
 
-export const ProjectForm = () => {
+export const ProjectForm = (props) => {
+  const { notify } = useNotifications();
   const [tabs, setTabs] = useState({
     fullPayment: true,
     partialyPayment: false,
@@ -32,22 +38,72 @@ export const ProjectForm = () => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    let Assigness = [];
+    for (let i = 0; i < data?.assigness?.length; i++) {
+      Assigness.push(data?.assigness[i]["assigneeId"]);
+    }
+    const phaseArr = [];
     const phasePaymentArr = [];
 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 4; i++) {
       const paymentKey = `paymentPhase_${i}`;
       const phaseKey = `phase_${i}`;
       if (data[paymentKey] && data[phaseKey]) {
-        const obj = {
-          [paymentKey]: data[paymentKey],
-          [phaseKey]: data[phaseKey],
-        };
-        phasePaymentArr.push(obj);
+        phasePaymentArr?.push(data[paymentKey]);
+        phaseArr?.push(data[phaseKey]);
       }
     }
-    console.log(phasePaymentArr);
+
+    const formData = new FormData();
+    formData.append("ProjectName", data?.projectName);
+    formData.append("Pricing", data?.pricing);
+    Assigness?.forEach((assignee, index) => {
+      formData.append(`Assigness[${index}]`, assignee);
+    });
+    formData.append("TotalHours", data?.totalHours);
+    tabs.fullPayment &&
+      data?.fullPayment &&
+      formData.append("AmountPaid", data?.fullPayment);
+
+    tabs.partialyPayment &&
+      phaseArr?.length >= 1 &&
+      phaseArr?.forEach((phase, index) => {
+        formData.append(`Phase[${index}]`, phase);
+      });
+    tabs.partialyPayment &&
+      phasePaymentArr?.length >= 1 &&
+      phasePaymentArr?.forEach((payment, index) => {
+        formData.append(`PartialyAmountPaid[${index}]`, payment);
+      });
+
+    createProjectMutation.mutate(formData);
   };
+
+  const createProjectMutation = useMutation(["create-project"], {
+    mutationFn: (onSubmit) =>
+      axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/createproject`,
+        onSubmit,
+        bearerToken()
+      ),
+    onSuccess: (data) => {
+      props.setIsOpen(false);
+      notify(
+        data?.data?.message
+          ? data?.data?.message
+          : "Project Created Successfully",
+        "success"
+      );
+    },
+    onError: (error) => {
+      notify(
+        error?.response?.data?.message
+          ? error?.response?.data?.message
+          : "OOPS! some error occured",
+        "error"
+      );
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=" p-5">
@@ -170,7 +226,7 @@ export const ProjectForm = () => {
         ) : null}
         {tabs.partialyPayment && tabs.partialyPayment ? (
           <div className="grid ">
-            {fields.map((field, index) => (
+            {fields?.map((field, index) => (
               <div key={index} className="relative flex gap-3">
                 <InputField
                   extra="mb-3"
@@ -203,9 +259,13 @@ export const ProjectForm = () => {
           </div>
         ) : null}
       </div>
-      <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
-        Create
-      </button>
+      {createProjectMutation?.isLoading ? (
+        <LoadingIcon />
+      ) : (
+        <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
+          Create
+        </button>
+      )}
     </form>
   );
 };
