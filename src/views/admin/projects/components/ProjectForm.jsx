@@ -23,6 +23,8 @@ export const ProjectForm = (props) => {
     handleSubmit,
     control,
     formState: { errors },
+    getValues,
+    reset,
   } = useForm({ resolver: yupResolver(projectSchema) });
 
   const [fields, setFields] = useState([{ phase: "", payment: "" }]);
@@ -31,10 +33,23 @@ export const ProjectForm = (props) => {
     setFields([...fields, { phase: "", payment: "" }]);
   };
 
+  // const handleRemoveField = (index) => {
+  //   const newFields = [...fields];
+  //   newFields.splice(index, 1);
+  //   setFields(newFields);
+  // };
+
   const handleRemoveField = (index) => {
     const newFields = [...fields];
-    newFields.splice(index, 1);
+    const removedField = newFields.splice(index, 1)[0];
     setFields(newFields);
+
+    const phaseKey = `phase_${index + 1}`;
+    const paymentKey = `paymentPhase_${index + 1}`;
+    const newFormData = { ...getValues() };
+    delete newFormData[phaseKey];
+    delete newFormData[paymentKey];
+    reset(newFormData);
   };
 
   const onSubmit = (data) => {
@@ -75,6 +90,9 @@ export const ProjectForm = (props) => {
       phasePaymentArr?.forEach((payment, index) => {
         formData.append(`PartialyAmountPaid[${index}]`, payment);
       });
+
+    console.log(phaseArr);
+    console.log(phasePaymentArr);
 
     createProjectMutation.mutate(formData);
   };
