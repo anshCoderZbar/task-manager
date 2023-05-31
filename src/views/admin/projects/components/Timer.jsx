@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PauseIcon, PlayIcon } from "assets/icons";
 
 export const Timer = () => {
-  const [time, setTime] = useState(8635419);
+  const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
