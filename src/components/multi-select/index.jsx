@@ -1,38 +1,27 @@
 import React from "react";
 import Multiselect from "multiselect-react-dropdown";
 import { Controller } from "react-hook-form";
+import axios from "axios";
+import { bearerToken } from "components/utils";
+import { useQuery } from "@tanstack/react-query";
 
 export const MultiSelectDropDown = (props) => {
-  const data = [
-    {
-      assigneeName: "Group 1",
-      key: "Option 1",
-    },
-    {
-      assigneeName: "Group 1",
-      key: "Option 2",
-    },
-    {
-      assigneeName: "Group 1",
-      key: "Option 3",
-    },
-    {
-      assigneeName: "Group 2",
-      key: "Option 4",
-    },
-    {
-      assigneeName: "Group 2",
-      key: "Option 5",
-    },
-    {
-      assigneeName: "Group 2",
-      key: "Option 6",
-    },
-    {
-      assigneeName: "Group 2",
-      key: "Option 7",
-    },
-  ];
+  const allEmployees = () => {
+    return axios?.get(
+      `${process.env.REACT_APP_API_BASE_URL}/users`,
+      bearerToken()
+    );
+  };
+
+  const allEmployeeQuery = useQuery(["all-existing-employee"], allEmployees);
+
+  const filteredUser =
+    allEmployeeQuery?.data?.data &&
+    allEmployeeQuery?.data?.data?.user?.map(({ username, id }) => ({
+      assigneeName: username,
+      assigneeId: id,
+    }));
+
   return (
     <Controller
       control={props?.control}
@@ -56,13 +45,13 @@ export const MultiSelectDropDown = (props) => {
                 outline: "none",
               },
             }}
-            displayValue="key"
+            displayValue="assigneeName"
             hidePlaceholder={true}
             closeOnSelect={false}
             onSelect={onChange}
             onRemove={onChange}
-            options={data}
-            renderOption={data}
+            options={filteredUser}
+            renderOption={filteredUser}
           />
         );
       }}
