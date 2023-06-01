@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { PauseIcon, PlayIcon } from "assets/icons";
+import { useAppContext } from "store/Store";
 
 export const Timer = () => {
-  const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    let intervalId;
-    if (isRunning) {
-      intervalId = setInterval(() => setTime((prevTime) => prevTime + 1), 10);
-    }
-    return () => clearInterval(intervalId);
-  }, [isRunning]);
+  const { time, isRunning, startAndStop } = useAppContext();
 
   const days = Math.floor(time / 8640000);
   const hours = Math.floor((time % 8640000) / 360000);
   const minutes = Math.floor((time % 360000) / 6000);
   const seconds = Math.floor((time % 6000) / 100);
-
-  const startAndStop = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
-    console.log(time);
-  };
 
   return (
     <div className="flex items-center py-4 text-center">
