@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { TimerProvider } from "./Timer";
 
 const UserContext = createContext({});
 
@@ -14,7 +15,7 @@ export const Store = ({ children }) => {
 
   return (
     <UserContext.Provider value={{ userDetails, setUserDetails }}>
-      {children}
+      <TimerProvider>{children}</TimerProvider>
     </UserContext.Provider>
   );
 };
