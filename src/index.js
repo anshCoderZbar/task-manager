@@ -7,6 +7,7 @@ import queryClient from "queryClient";
 import { Store } from "store/Store";
 import { NotificationsProvider } from "reapop";
 import { Notification } from "components/notification";
+import { TimerProvider } from "store/Timer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -16,7 +17,9 @@ root.render(
       <NotificationsProvider>
         <Notification />
         <Store>
-          <App />
+          <TimerProvider>
+            <App />
+          </TimerProvider>
         </Store>
       </NotificationsProvider>
     </QueryClientProvider>
