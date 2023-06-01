@@ -1,9 +1,9 @@
 import React from "react";
 import { PauseIcon, PlayIcon } from "assets/icons";
-import { useTimerContext } from "store/Timer";
+import { useAppContext } from "store/Store";
 
 export const Timer = () => {
-  const { time, isRunning, startAndStop } = useTimerContext();
+  const { time, isRunning, startAndStop } = useAppContext();
 
   const days = Math.floor(time / 8640000);
   const hours = Math.floor((time % 8640000) / 360000);
