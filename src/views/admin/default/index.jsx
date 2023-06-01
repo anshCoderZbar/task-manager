@@ -15,12 +15,26 @@ import DailyTraffic from "views/admin/default/components/DailyTraffic";
 import TaskCard from "views/admin/default/components/TaskCard";
 import tableDataCheck from "./variables/tableDataCheck.json";
 import tableDataComplex from "./variables/tableDataComplex.json";
+import { useAppContext } from "store/Store";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const { userDetails, setUserDetails } = useAppContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const auth = JSON.parse(sessionStorage.getItem("userData"));
+    if (auth) {
+      setUserDetails(auth);
+    }
+    if (!auth?.token) {
+      navigate("/auth/");
+    }
+  }, []);
+
   return (
     <div>
-      {/* Card widget */}
-
       <div className="mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6">
         <Widget
           icon={<MdBarChart className="h-7 w-7" />}

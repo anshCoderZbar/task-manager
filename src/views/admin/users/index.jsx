@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { PopupModal } from "components/modal";
 import { EmployeeForm } from "./components/EmployeeForm";
 import { EmployeeCard } from "./components/EmployeeCard";
+import { useNavigate } from "react-router-dom";
 
 export const Employees = () => {
+  const navigate = useNavigate();
   let [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    const auth = JSON.parse(sessionStorage.getItem("userData"));
+    if (!auth?.token) {
+      navigate("/auth/");
+    }
+  }, []);
 
   return (
     <div className="pt-5s mx-auto mb-auto flex h-full min-h-[84vh] w-full flex-col gap-5 p-2 md:pr-2">
@@ -30,13 +38,9 @@ export const Employees = () => {
         <h4 className="mb-2 border-b py-4 px-5 text-lg font-bold">
           Create Employees
         </h4>
-        <EmployeeForm />
+        <EmployeeForm setIsOpen={setIsOpen} />
       </PopupModal>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3">
-        <EmployeeCard />
-        <EmployeeCard />
-        <EmployeeCard />
-      </div>
+      <EmployeeCard />
     </div>
   );
 };

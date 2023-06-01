@@ -1,13 +1,18 @@
 import { PopupModal } from "components/modal";
 import React, { useState } from "react";
 import { ProjectDetailCard } from "./ProjectDetailCard";
+import { Timer } from "./Timer";
 
 export const ProjectCard = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="p-6">
-        <h2 className="mb-2 text-lg font-bold">Project Name</h2>
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="mr-2 text-lg font-bold">Project Name</h2>
+          <Timer />
+        </div>
         <div className="mb-4 flex items-center justify-between">
           <span className="text-sm font-bold text-gray-600">Pricing:</span>
           <span className="text-sm font-bold text-gray-700">$1000</span>

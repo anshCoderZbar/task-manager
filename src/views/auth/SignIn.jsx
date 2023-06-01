@@ -1,10 +1,28 @@
+import axios from "axios";
+import { useNotifications } from "reapop";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
+
 import InputField from "components/fields/InputField";
 import Checkbox from "components/checkbox";
-import { useForm } from "react-hook-form";
 import { loginSchema } from "./variables/validation";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
+import { LoadingIcon } from "assets/icons";
+import { useEffect } from "react";
+import { useAppContext } from "store/Store";
 
 export default function SignIn() {
+  const { notify } = useNotifications();
+  const navigate = useNavigate();
+  const { userDetails } = useAppContext();
+
+  useEffect(() => {
+    if (userDetails.token) {
+      navigate("/admin/");
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -12,8 +30,24 @@ export default function SignIn() {
   } = useForm({ resolver: yupResolver(loginSchema) });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("email", data?.email);
+    formData.append("password", data?.password);
+    loginQuery.mutate(formData);
   };
+
+  const loginQuery = useMutation(["login"], {
+    mutationFn: (onSubmit) =>
+      axios.post(`${process.env.REACT_APP_API_BASE_URL}/login`, onSubmit),
+    onSuccess: (data) => {
+      notify(data?.data?.message, "success");
+      sessionStorage.setItem("userData", JSON.stringify(data?.data));
+      navigate("/admin");
+    },
+    onError: (error) => {
+      notify(error?.response?.data?.message, "error");
+    },
+  });
 
   return (
     <div className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start">
@@ -59,9 +93,15 @@ export default function SignIn() {
               Forgot Password?
             </a>
           </div>
-          <button className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200">
-            Sign In
-          </button>
+          {loginQuery?.isLoading ? (
+            <div className="flex items-center justify-center">
+              <LoadingIcon />
+            </div>
+          ) : (
+            <button className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200">
+              Sign In
+            </button>
+          )}
         </form>
         <div className="mt-4">
           <span className=" text-sm font-medium text-navy-700 dark:text-gray-600">

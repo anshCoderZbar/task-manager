@@ -1,11 +1,18 @@
 import React, { useState } from "react";
+import { useNotifications } from "reapop";
 import { useForm } from "react-hook-form";
 
 import InputField from "components/fields/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { employeeValidation } from "../variable/validation";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { bearerToken } from "components/utils";
+import queryClient from "queryClient";
+import { LoadingIcon } from "assets/icons";
 
-export const EmployeeForm = () => {
+export const EmployeeForm = (props) => {
+  const { notify } = useNotifications();
   const {
     register,
     handleSubmit,
@@ -17,6 +24,7 @@ export const EmployeeForm = () => {
   const handleFileChange = (e) => {
     setSelectedFiles([...selectedFiles, ...e.target.files]);
   };
+
   const handleRemoveFile = (index) => {
     const updatedFiles = [...selectedFiles];
     updatedFiles.splice(index, 1);
@@ -24,13 +32,43 @@ export const EmployeeForm = () => {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     const formData = new FormData();
-    for (let i = 0; i < selectedFiles.length; i++) {
-      formData.append("files", selectedFiles[i]);
-      console.log(selectedFiles);
-    }
+    formData.append("username", data?.userName);
+    formData.append("email", data?.email);
+    formData.append("designation", data?.designation);
+    formData.append("phone", data?.phone);
+    selectedFiles.forEach((file, index) => {
+      formData.append(`file[${index}]`, file);
+    });
+    formData.append("joiningdate", data?.joiningDate);
+    formData.append("dateofbirth", data?.birthDate);
+    formData.append("bloodgroup", data?.bloodGroup);
+    formData.append("password", data?.password);
+    formData.append("password_confirmation", data?.confirmPassword);
+    addEmployeeQuery.mutate(formData);
   };
+
+  const addEmployeeQuery = useMutation(["add-employee"], {
+    mutationFn: (onSubmit) =>
+      axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/addemployee`,
+        onSubmit,
+        bearerToken()
+      ),
+    onSuccess: (data) => {
+      notify("Employee added successfully", "success");
+      props.setIsOpen(false);
+      queryClient.invalidateQueries(["fetch-employee"]);
+    },
+    onError: (error) => {
+      notify(
+        error?.response?.data?.message
+          ? error?.response?.data?.message
+          : "OOPS! some error occured",
+        "error"
+      );
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-5">
@@ -87,7 +125,9 @@ export const EmployeeForm = () => {
             Upload file
           </label>
           <input
-            className="mt-2 block  h-12 w-full cursor-pointer rounded-sm border bg-white/0 p-3 text-sm outline-none"
+            className={`mt-2 block  h-12 w-full cursor-pointer rounded-sm border ${
+              errors?.upload?.message ? "border-red-500" : "bg-white/0"
+            } p-3 text-sm outline-none`}
             id="upload"
             type="file"
             name="upload"
@@ -103,7 +143,7 @@ export const EmployeeForm = () => {
               <button onClick={() => handleRemoveFile(index)}>Remove</button>
             </div>
           ))}
-          <p className="errorMessage">{errors?.upload?.message}</p>
+          <p className="errorMessage !mt-4">{errors?.upload?.message}</p>
         </div>
         <div className="grid grid-cols-1 gap-0 md:grid-cols-2 md:gap-3">
           <div>
@@ -167,9 +207,13 @@ export const EmployeeForm = () => {
         />
         <p className="errorMessage">{errors?.confirmPassword?.message}</p>
       </div>
-      <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
-        Create
-      </button>
+      {addEmployeeQuery?.isLoading ? (
+        <LoadingIcon />
+      ) : (
+        <button className="bg-transparent hover:border-transparent rounded border border-[#422AFB] py-2 px-4 font-semibold text-navy-700 hover:bg-brand-500 hover:text-white">
+          Create
+        </button>
+      )}
     </form>
   );
 };
