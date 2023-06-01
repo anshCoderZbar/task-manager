@@ -6,6 +6,8 @@ export const Store = ({ children }) => {
   const [userDetails, setUserDetails] = useState({});
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [startTime, setStartTime] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
     const auth = JSON.parse(sessionStorage.getItem("userData"));
@@ -15,15 +17,27 @@ export const Store = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    let intervalId;
     if (isRunning) {
-      intervalId = setInterval(() => setTime((prevTime) => prevTime + 1), 10);
+      setStartTime(performance.now() - time * 10);
+      const id = setInterval(() => {
+        const currentTime = performance.now();
+        const elapsedTime = Math.floor((currentTime - startTime) / 10);
+        setTime(elapsedTime);
+      }, 10);
+      setIntervalId(id);
+    } else {
+      clearInterval(intervalId);
     }
-    return () => clearInterval(intervalId);
   }, [isRunning]);
 
   const startAndStop = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
+    if (isRunning) {
+      setIsRunning(false);
+      clearInterval(intervalId);
+    } else {
+      setStartTime(performance.now() - time * 10);
+      setIsRunning(true);
+    }
   };
 
   return (
