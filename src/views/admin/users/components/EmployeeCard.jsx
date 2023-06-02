@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 import avatar from "assets/img/avatars/avatar.png";
 
-import { BiEdit, BiCake, BiDonateBlood } from "react-icons/bi";
+import { BiEdit, BiCake } from "react-icons/bi";
+import { MdOutlineBloodtype } from "react-icons/md";
 import {
   AiOutlineMail,
   AiOutlineCalendar,
@@ -156,7 +157,7 @@ export const EmployeeCard = () => {
                           </span>
                         </div>
                         <div className="mb-3 flex items-center">
-                          <BiDonateBlood className="text-gray-600" />
+                          <MdOutlineBloodtype className="text-gray-600" />
                           <span className="ml-2 uppercase text-gray-700">
                             Blood Group: {user?.bloodgroup}
                           </span>

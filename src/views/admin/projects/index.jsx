@@ -9,7 +9,7 @@ export const ProjectsOverView = () => {
   return (
     <div className="pt-5s mx-auto mb-auto flex h-full min-h-[84vh] w-full flex-col gap-5 p-2 md:pr-2">
       <div className="flex justify-between pt-7">
-        <h2 className="text-lg font-bold">Projects</h2>
+        <h2 className="text-lg font-bold dark:text-white">Projects</h2>
         <div>
           <button
             type="button"
