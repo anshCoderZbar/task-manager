@@ -2,6 +2,9 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export function SidebarLinks(props) {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
+  console.log(props);
+
   let location = useLocation();
 
   const { routes } = props;
@@ -11,7 +14,15 @@ export function SidebarLinks(props) {
   };
 
   const createLinks = (routes) => {
-    return routes?.map((route, index) => {
+    const filteredRoutes = routes.filter((route) => {
+      if (userData.user.role === "admin") {
+        return true;
+      } else {
+        return route.employee;
+      }
+    });
+
+    return filteredRoutes.map((route, index) => {
       if (
         (route.layout === "/admin" && route.name) ||
         route.layout === "/auth"

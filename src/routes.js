@@ -10,11 +10,11 @@ import { MdHome, MdPerson, MdWorkOutline, MdBadge } from "react-icons/md";
 import { Employees } from "views/admin/users";
 import { SingleEmployee } from "views/admin/users/components/SingleEmployee";
 
-const userData = JSON.parse(sessionStorage.getItem("userData"));
 const routes = [
   {
     name: "Main Dashboard",
     layout: "/admin",
+    employee: true,
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
@@ -22,31 +22,36 @@ const routes = [
   {
     name: "Profile",
     layout: "/admin",
+    employee: true,
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
   },
-  userData?.user?.role === "admin" && {
+  {
     name: "Employees",
     layout: "/admin",
+    employee: false,
     path: "employees",
     icon: <MdBadge className="h-6 w-6" />,
     component: <Employees />,
   },
-  userData?.user?.role === "admin" && {
+  {
     layout: "/admin",
+    employee: false,
     path: "/employees/:id",
     component: <SingleEmployee />,
   },
   {
     name: "Projects",
     layout: "/admin",
+    employee: true,
     path: "projects",
     icon: <MdWorkOutline className="h-6 w-6" />,
     component: <ProjectsOverView />,
   },
   {
     layout: "/auth",
+    employee: true,
     path: "sign-in",
     component: <SignIn />,
   },
