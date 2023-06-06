@@ -1,24 +1,16 @@
 import React from "react";
 
-// Admin Imports
 import MainDashboard from "views/admin/default";
 import Profile from "views/admin/profile";
 import { ProjectsOverView } from "views/admin/projects";
 
-// Auth Imports
 import SignIn from "views/auth/SignIn";
 
-// Icon Imports
-import {
-  MdHome,
-  MdPerson,
-  MdLock,
-  MdWorkOutline,
-  MdBadge,
-} from "react-icons/md";
+import { MdHome, MdPerson, MdWorkOutline, MdBadge } from "react-icons/md";
 import { Employees } from "views/admin/users";
 import { SingleEmployee } from "views/admin/users/components/SingleEmployee";
 
+const userData = JSON.parse(sessionStorage.getItem("userData"));
 const routes = [
   {
     name: "Main Dashboard",
@@ -34,14 +26,14 @@ const routes = [
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,
   },
-  {
+  userData?.user?.role === "admin" && {
     name: "Employees",
     layout: "/admin",
     path: "employees",
     icon: <MdBadge className="h-6 w-6" />,
     component: <Employees />,
   },
-  {
+  userData?.user?.role === "admin" && {
     layout: "/admin",
     path: "/employees/:id",
     component: <SingleEmployee />,

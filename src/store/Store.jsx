@@ -34,7 +34,9 @@ export const Store = ({ children }) => {
     if (isRunning) {
       setIsRunning(false);
       clearInterval(intervalId);
+      console.log(time, "endTime");
     } else {
+      console.log(time, "startTime");
       setStartTime(performance.now() - time * 10);
       setIsRunning(true);
     }

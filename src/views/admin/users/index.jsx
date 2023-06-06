@@ -10,6 +10,11 @@ export const Employees = () => {
   let [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const auth = JSON.parse(sessionStorage.getItem("userData"));
+
+    if (auth?.user?.role.toLowerCase() !== "admin") {
+      navigate("/admin/");
+    }
+
     if (!auth?.token) {
       navigate("/auth/");
     }
