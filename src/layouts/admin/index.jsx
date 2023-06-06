@@ -4,6 +4,7 @@ import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
 import Footer from "components/footer/Footer";
 import routes from "routes.js";
+import { ErrorPage } from "views/admin/404/Error";
 
 export default function Admin(props) {
   const { ...rest } = props;
@@ -46,7 +47,7 @@ export default function Admin(props) {
   };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop?.layout === "/admin") {
         return (
           <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { ProjectDetailCard } from "./ProjectDetailCard";
 import { Timer } from "./Timer";
 
-export const ProjectCard = () => {
+export const ProjectCard = ({ userData }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -52,9 +52,11 @@ export const ProjectCard = () => {
           >
             View details
           </button>
-          <button className="rounded bg-brand-500 py-2 px-4 font-bold text-white hover:bg-brand-700 dark:bg-brand-800">
-            Edit Time
-          </button>
+          {userData?.user?.role?.toLowerCase() === "admin" ? (
+            <button className="rounded bg-brand-500 py-2 px-4 font-bold text-white hover:bg-brand-700 dark:bg-brand-800">
+              Edit Time
+            </button>
+          ) : null}
         </div>
         <PopupModal
           isOpen={isOpen}
