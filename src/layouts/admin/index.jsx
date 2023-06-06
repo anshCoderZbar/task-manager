@@ -47,7 +47,7 @@ export default function Admin(props) {
   };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop?.layout === "/admin") {
+      if (prop.layout === "/admin") {
         return (
           <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
@@ -82,6 +82,7 @@ export default function Admin(props) {
                   path="/"
                   element={<Navigate to="/admin/default" replace />}
                 />
+                <Route path="*" element={<ErrorPage />} />
               </Routes>
             </div>
             <div className="p-3">
