@@ -14,7 +14,7 @@ const routes = [
   {
     name: "Main Dashboard",
     layout: "/admin",
-    employee: true,
+    employee: false,
     path: "default",
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
@@ -22,7 +22,7 @@ const routes = [
   {
     name: "Profile",
     layout: "/admin",
-    employee: true,
+    employee: false,
     path: "profile",
     icon: <MdPerson className="h-6 w-6" />,
     component: <Profile />,

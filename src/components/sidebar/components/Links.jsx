@@ -15,14 +15,14 @@ export function SidebarLinks(props) {
 
   const createLinks = (routes) => {
     const filteredRoutes = routes.filter((route) => {
-      if (userData.user.role === "admin") {
+      if (userData?.user?.role === "admin") {
         return true;
       } else {
-        return route.employee;
+        return route?.employee;
       }
     });
 
-    return filteredRoutes.map((route, index) => {
+    return filteredRoutes?.map((route, index) => {
       if (
         (route.layout === "/admin" && route.name) ||
         route.layout === "/auth"
