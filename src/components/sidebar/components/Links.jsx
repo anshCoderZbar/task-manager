@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 
 export function SidebarLinks(props) {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
-  console.log(props);
 
   let location = useLocation();
 

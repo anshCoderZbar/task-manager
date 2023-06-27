@@ -10,6 +10,7 @@ import axios from "axios";
 import { bearerToken } from "components/utils";
 import { useNotifications } from "reapop";
 import { LoadingIcon } from "assets/icons";
+import queryClient from "queryClient";
 
 export const ProjectForm = (props) => {
   const { notify } = useNotifications();
@@ -28,9 +29,13 @@ export const ProjectForm = (props) => {
   } = useForm({ resolver: yupResolver(projectSchema) });
 
   const [fields, setFields] = useState([{ phase: "", payment: "" }]);
+  const [paymentType, setPaymentType] = useState("fullPayment");
 
   const handleAddField = () => {
     setFields([...fields, { phase: "", payment: "" }]);
+  };
+  const handlePaymentType = (e) => {
+    setPaymentType(e.target.value);
   };
 
   // const handleRemoveField = (index) => {
@@ -76,6 +81,7 @@ export const ProjectForm = (props) => {
       formData.append(`Assigness[${index}]`, assignee);
     });
     formData.append("TotalHours", data?.totalHours);
+    formData.append("PaymentType", paymentType);
     tabs.fullPayment &&
       data?.fullPayment &&
       formData.append("AmountPaid", data?.fullPayment);
@@ -90,10 +96,6 @@ export const ProjectForm = (props) => {
       phasePaymentArr?.forEach((payment, index) => {
         formData.append(`PartialyAmountPaid[${index}]`, payment);
       });
-
-    console.log(phaseArr);
-    console.log(phasePaymentArr);
-
     createProjectMutation.mutate(formData);
   };
 
@@ -106,6 +108,7 @@ export const ProjectForm = (props) => {
       ),
     onSuccess: (data) => {
       props.setIsOpen(false);
+      queryClient.invalidateQueries(["fetch-project"]);
       notify(
         data?.data?.message
           ? data?.data?.message
@@ -189,14 +192,14 @@ export const ProjectForm = (props) => {
           >
             <input
               type="radio"
-              id="option1"
-              name="option"
-              value="option1"
+              id="fullPayment"
+              name="paymentType"
+              value="fullPayment"
               className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
               checked={tabs.fullPayment ? true : false}
-              readOnly
+              onChange={handlePaymentType}
             />
-            <label htmlFor="option1" className="font-medium text-gray-700">
+            <label htmlFor="fullPayment" className="font-medium text-gray-700">
               Full payment
             </label>
           </div>
@@ -211,12 +214,16 @@ export const ProjectForm = (props) => {
           >
             <input
               type="radio"
-              id="option2"
-              name="option"
-              value="option2"
+              id="partialyPayment"
+              name="paymentType"
+              value="partialyPayment"
+              onChange={handlePaymentType}
               className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
             />
-            <label htmlFor="option2" className="font-medium text-gray-700">
+            <label
+              htmlFor="partialyPayment"
+              className="font-medium text-gray-700"
+            >
               Partialy paid
             </label>
             {tabs.partialyPayment && fields.length < 4 ? (
